@@ -16,9 +16,7 @@ app = FastAPI()
 
 ORDERS = []
 
-dynamodb = boto3.resource('dynamodb', region_name='us-west-1', 
-                          aws_access_key_id='AKIAYRFBMU4JSSQC6ZU7',
-                          aws_secret_access_key='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')
+dynamodb = boto3.resource('dynamodb', region_name='us-west-1')
 dynamodb_table_name = 'naders_taters_orders_service'
 dynamodb_table = dynamodb.Table(dynamodb_table_name)
 
