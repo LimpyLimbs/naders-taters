@@ -14,8 +14,6 @@ class EnumEncoder(json.JSONEncoder):
 
 app = FastAPI()
 
-ORDERS = []
-
 dynamodb = boto3.resource('dynamodb', region_name='us-west-1')
 dynamodb_table_name = 'naders_taters_orders_service'
 dynamodb_table = dynamodb.Table(dynamodb_table_name)
