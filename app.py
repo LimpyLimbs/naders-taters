@@ -22,15 +22,17 @@ dynamodb_table = dynamodb.Table(dynamodb_table_name)
 
 @app.get('/orders')
 def get_orders():
-    return ORDERS
+    response = dynamodb_table.scan()
+    order_ids = [item['order_id'] for item in response.get('Items', [])]
+    return order_ids
 
-@app.post('/orders', status_code=status.HTTP_201_CREATED) # , response_model=GetOrderSchema)
+@app.post('/orders', status_code=status.HTTP_201_CREATED, response_model=GetOrderSchema)
 def create_order(items: CreateOrderSchema):
     order = items.dict()
     order['order_id'] = uuid4()
     order['created'] = datetime.utcnow()
-    dynamodb_response_code = import_order_to_dynamodb(order)
-    return {'database_response_code': dynamodb_response_code, 'order_details': order}
+    import_order_to_dynamodb(order)
+    return order
 
 def import_order_to_dynamodb(order_data: GetOrderSchema):
     order_id = str(order_data['order_id'])
