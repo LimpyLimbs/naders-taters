@@ -29,7 +29,7 @@ def create_order(items: CreateOrderSchema):
 def import_order_to_dynamodb(order_data: GetOrderSchema):
     order_id = str(order_data['order_id'])
     created = str(order_data['created'])
-    items = json.dumps(order_data['items'])# , cls=EnumEncoder)
+    items = json.dumps(order_data['items'])
     dynamodb_item = {
         'order_id': order_id,
         'created': created,
