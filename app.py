@@ -6,12 +6,6 @@ from schemas import CreateOrderSchema, GetOrderSchema, Flavor, Size
 import boto3
 import json
 
-class EnumEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, (Flavor, Size)):
-            return str(obj)
-        return super(EnumEncoder, self).default(obj)
-
 app = FastAPI()
 
 dynamodb = boto3.resource('dynamodb', region_name='us-west-1')
@@ -35,7 +29,7 @@ def create_order(items: CreateOrderSchema):
 def import_order_to_dynamodb(order_data: GetOrderSchema):
     order_id = str(order_data['order_id'])
     created = str(order_data['created'])
-    items = json.dumps(order_data['items'], cls=EnumEncoder)
+    items = json.dumps(order_data['items'])# , cls=EnumEncoder)
     dynamodb_item = {
         'order_id': order_id,
         'created': created,
