@@ -9,7 +9,7 @@ app = FastAPI()
 ORDERS = []
 
 @app.get('/orders')
-def get_order_ids():
+def get_orders():
     return ORDERS
 
 @app.post('/orders', status_code=status.HTTP_201_CREATED, response_model=GetOrderSchema)
@@ -28,10 +28,17 @@ def get_order(order_id: UUID):
         raise HTTPException(status_code=404, detail=f'order {order_id} was not found')
     
 @app.put('/orders/{order_id}', status_code=status.HTTP_201_CREATED, response_model=GetOrderSchema)
-def update_order(updated_order: GetOrderSchema):
-    updated_order_id = updated_order['order_id']
-    for order in ORDERS:
-        if order['order_id'] == updated_order_id:
-            ORDERS.update(update_order.model_dump())
-            return update_order
-        raise HTTPException(status_code=404, detail=f'order {updated_order_id} was not found')
+def update_order(order_id: UUID, updated_order: GetOrderSchema):
+    for index, order in enumerate(ORDERS):
+        if order['order_id'] == order_id:
+            ORDERS[index] = updated_order.model_dump()
+            return updated_order
+    raise HTTPException(status_code=404, detail=f'order {order_id} was not found')
+
+@app.delete('/orders/{order_id}', status_code=status.HTTP_202_ACCEPTED)
+def delete_order(order_id: UUID):
+    for index, order in enumerate(ORDERS):
+        if order['order_id'] == order_id['order_id']:
+            ORDERS.pop(index)
+            return f'Order {order_id} has been deleted'
+    raise HTTPException(status_code=404, detail=f'order {order_id} was not found')
