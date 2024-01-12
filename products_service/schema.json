@@ -1,0 +1,17 @@
+[
+    {
+        "flavor": "classic",
+        "size": "medium",
+        "inventory": -3
+    },
+    {
+        "flavor": "barbeque",
+        "size": "large",
+        "inventory": -5
+    },
+    {
+        "flavor": "salt_and_vinegar",
+        "size": "small",
+        "inventory": 2
+    }
+]

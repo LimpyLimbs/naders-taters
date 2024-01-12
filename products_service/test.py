@@ -1,9 +1,3 @@
-from fastapi import FastAPI, Body
-from schemas import UpdateInventorySchema
-from starlette import status
-
-app = FastAPI()
-
 PRODUCTS = {
     'classic': {
         'prices': {
@@ -127,37 +121,28 @@ PRODUCTS = {
     }
 }
 
-@app.get('/products')
-def get_all():
-    return PRODUCTS
+inventory_changes = {
+  "items": [
+    {
+      "flavor": "barbeque",
+      "size": "small",
+      "quantity": 2
+    },
+    {
+      "flavor": "class",
+      "size": "medium",
+      "quantity": 2
+    }
+  ]
+}
 
-@app.get('/products/prices')
-def get_prices():
-    prices = {}
+def update_inventory(inventory_changes):
     for product_name, product_details in PRODUCTS.items():
-        prices[product_name] = product_details['prices']
-    return prices
-
-@app.get('/products/inventory')
-def get_inventory():
-    inventory = {}
-    for product_name, product_details in PRODUCTS.items():
-        inventory[product_name] = product_details['inventory']
-    return inventory
-
-@app.put('/products/inventory', status_code=status.HTTP_201_CREATED)
-def update_inventory(inventory_changes: UpdateInventorySchema):
-    inventory_changes_dict = inventory_changes.model_dump()
-    for product_name, product_details in PRODUCTS.items():
-        for object in inventory_changes_dict['items']:
+        for object in inventory_changes['items']:
+            # print(product_name + ' ' + object['flavor'])
             if product_name == object['flavor']:
-                old_inventory = product_details['inventory'][object['size']]
-                new_inventory = old_inventory + object['quantity']
-                product_details['inventory'][object['size']] = new_inventory
-                return {"old_inventory": old_inventory, "new_inventory": new_inventory}
-            
+                print(product_name)
+                new_inventory = product_details['inventory'][object['size']]
+                new_inventory = new_inventory + object['quantity']
                 
-                
-'''
-products service is responsible for maintaining a list of products and their details
-'''
+update_inventory(inventory_changes)

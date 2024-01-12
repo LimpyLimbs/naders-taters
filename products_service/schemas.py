@@ -1,6 +1,5 @@
 from enum import Enum
-from datetime import datetime
-from typing import Optional, List
+from typing import List
 from pydantic import BaseModel, conint
 
 class Flavor(str, Enum):
@@ -26,10 +25,10 @@ class Size(str, Enum):
     def __str__(self):
         return self.value
 
-class ItemSchema(BaseModel):
+class InventorySchema(BaseModel):
     flavor: Flavor
     size: Size
     quantity: int
 
 class UpdateInventorySchema(BaseModel):
-    items: List[ItemSchema]
+    items: List[InventorySchema]
