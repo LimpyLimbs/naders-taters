@@ -38,7 +38,7 @@ def update_order(order_id: UUID, updated_order: GetOrderSchema):
 @app.delete('/orders/{order_id}', status_code=status.HTTP_202_ACCEPTED)
 def delete_order(order_id: UUID):
     for index, order in enumerate(ORDERS):
-        if order['order_id'] == order_id['order_id']: # probably this is thrwoing an error
+        if order['order_id'] == order_id:
             ORDERS.pop(index)
             return f'Order {order_id} has been deleted'
     raise HTTPException(status_code=404, detail=f'order {order_id} was not found')
