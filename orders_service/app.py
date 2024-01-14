@@ -3,6 +3,8 @@ from uuid import uuid4, UUID
 from fastapi import FastAPI, HTTPException
 from starlette import status
 from schemas import CreateOrderSchema, GetOrderSchema
+import requests
+import json
 
 app = FastAPI()
 
@@ -18,6 +20,7 @@ def create_order(items: CreateOrderSchema):
     order['order_id'] = uuid4()
     order['created'] = datetime.utcnow()
     ORDERS.append(order)
+    update_inventory(order)
     return order
 
 @app.get('/orders/{order_id}', response_model=GetOrderSchema)
@@ -42,3 +45,14 @@ def delete_order(order_id: UUID):
             ORDERS.pop(index)
             return f'Order {order_id} has been deleted'
     raise HTTPException(status_code=404, detail=f'order {order_id} was not found')
+
+def update_inventory(order: dict):
+    inventory_changes = {}
+    inventory_changes['items'] = order['items']
+    print(inventory_changes)
+    response = requests.put('http://127.0.0.1:8080/products/inventory', json=inventory_changes)
+    print(response.status_code)
+    print(response)
+
+# products service = 172.31.8.169
+# orders service = 172.31.5.34

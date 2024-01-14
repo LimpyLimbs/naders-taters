@@ -161,3 +161,5 @@ def update_inventory(inventory_changes: UpdateInventorySchema):
 '''
 products service is responsible for maintaining a list of products and their details
 '''
+# products service = 172.31.8.169
+# orders service = 172.31.5.34

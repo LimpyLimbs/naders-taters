@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: naders-taters-orders-api-app
-          image: limpylimbs/naders-taters-orders-api:0.5
+          image: limpylimbs/naders-taters-orders-api:0.7
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
@@ -38,7 +38,8 @@ spec:
     app: naders-taters-orders-api-app
   type: LoadBalancer
   externalIPs:
-    - 13.56.139.222
+    - 54.219.137.109
+    - 172.31.5.34
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
