@@ -38,7 +38,7 @@ spec:
     app: naders-taters-products-api-app
   type: LoadBalancer
   externalIPs:
-    - 13.57.28.107
+    - 54.153.10.107
     - 172.31.8.169
 ---
 apiVersion: networking.k8s.io/v1
