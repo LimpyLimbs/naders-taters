@@ -55,14 +55,16 @@ def update_inventory(order: dict):
     inventory_changes['items'] = order['items']
     for item in inventory_changes['items']:
         item['quantity'] = item['quantity'] * -1
-    requests.put('http://127.0.0.1:8080/products/inventory', json=inventory_changes)
+    requests.put('https://c76vzjivmb.execute-api.us-west-1.amazonaws.com/dev/products/inventory', json=inventory_changes)
     
 def calculate_price(order: dict):
-    product_prices = requests.get('http://127.0.0.1:8080/products/prices').json()
+    product_prices = requests.get('https://c76vzjivmb.execute-api.us-west-1.amazonaws.com/dev/products/prices').json()
     order_price = 0
     for item in order['items']:
         order_price = order_price + (item['quantity'] * product_prices[item['flavor']][item['size']])
     return order_price
 
 # products service = https://c76vzjivmb.execute-api.us-west-1.amazonaws.com/dev/products/inventory
+# http://127.0.0.1:8080/products/prices
+# http://127.0.0.1:8080/products/inventory
 # orders service = https://c76vzjivmb.execute-api.us-west-1.amazonaws.com/dev/orders/
