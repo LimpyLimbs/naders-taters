@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: naders-taters-orders-api-app
-          image: limpylimbs/naders-taters-orders-api:0.9
+          image: limpylimbs/naders-taters-orders-api:0.10
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
