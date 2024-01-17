@@ -23,7 +23,6 @@ def create_order(items: CreateOrderSchema):
     ORDERS.append(order)
     order_copy = deepcopy(order)
     update_inventory(order_copy)
-
     return order
 
 @app.get('/orders/{order_id}', response_model=GetOrderSchema)
@@ -60,7 +59,6 @@ def update_inventory(order: dict):
     
 def calculate_price(order: dict):
     product_prices = requests.get('http://127.0.0.1:8080/products/prices').json()
-    print(product_prices)
     order_price = 0
     for item in order['items']:
         order_price = order_price + (item['quantity'] * product_prices[item['flavor']][item['size']])
