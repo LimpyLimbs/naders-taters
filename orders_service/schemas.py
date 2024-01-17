@@ -34,7 +34,10 @@ class ItemSchema(BaseModel):
 
 class CreateOrderSchema(BaseModel):
     items: List[ItemSchema]
-    
-class GetOrderSchema(CreateOrderSchema):
+
+class UpdateOrderSchema(CreateOrderSchema):
     order_id: UUID
     created: datetime
+    
+class GetOrderSchema(UpdateOrderSchema):
+    price: float
