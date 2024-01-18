@@ -62,6 +62,8 @@ def calculate_price(order: dict):
     order_price = 0
     for item in order['items']:
         order_price = order_price + (item['quantity'] * product_prices[item['flavor']][item['size']])
+    # round order price to nearest hundredth
+    order_price = round(order_price, 2)
     return order_price
 
 # products service = https://c76vzjivmb.execute-api.us-west-1.amazonaws.com/dev/products/inventory

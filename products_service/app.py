@@ -7,9 +7,9 @@ app = FastAPI()
 PRODUCTS = {
     'classic': {
         'prices': {
-            'small': 1.99,
-            'medium': 2.99,
-            'large': 3.99
+            'small': 1.73,
+            'medium': 2.31,
+            'large': 3.42
             },
         'inventory': {
             'small': 364,
@@ -19,9 +19,9 @@ PRODUCTS = {
     },
     'barbeque': {
         'prices': {
-            'small': 1.99,
-            'medium': 2.99,
-            'large': 3.99
+            'small': 1.21,
+            'medium': 2.31,
+            'large': 3.73
             },
         'inventory': {
             'small': 834,
@@ -31,9 +31,9 @@ PRODUCTS = {
     },
     'sour_cream_and_onion': {
         'prices': {
-            'small': 1.99,
-            'medium': 2.99,
-            'large': 3.99
+            'small': 1.22,
+            'medium': 2.20,
+            'large': 3.39
             },
         'inventory': {
             'small': 1364,
@@ -43,8 +43,8 @@ PRODUCTS = {
     },
     'salt_and_vinegar': {
         'prices': {
-            'small': 1.99,
-            'medium': 2.99,
+            'small': 1.63,
+            'medium': 2.31,
             'large': 3.99
             },
         'inventory': {
@@ -55,9 +55,9 @@ PRODUCTS = {
     },
     'cheddar': {
         'prices': {
-            'small': 1.99,
-            'medium': 2.99,
-            'large': 3.99
+            'small': 1.44,
+            'medium': 2.83,
+            'large': 3.09
             },
         'inventory': {
             'small': 5834,
@@ -67,9 +67,9 @@ PRODUCTS = {
     },
     'pizza': {
         'prices': {
-            'small': 1.99,
-            'medium': 2.99,
-            'large': 3.99
+            'small': 1.77,
+            'medium': 2.84,
+            'large': 3.33
             },
         'inventory': {
             'small': 386,
@@ -79,9 +79,9 @@ PRODUCTS = {
     },
     'jalapano': {
         'prices': {
-            'small': 1.99,
-            'medium': 2.99,
-            'large': 3.99
+            'small': 1.13,
+            'medium': 2.37,
+            'large': 3.73
             },
         'inventory': {
             'small': 8264,
@@ -91,9 +91,9 @@ PRODUCTS = {
     },
     'kettle_cooked': {
         'prices': {
-            'small': 1.99,
-            'medium': 2.99,
-            'large': 3.99
+            'small': 1.54,
+            'medium': 2.28,
+            'large': 3.07
         },
         'inventory': {
             'small': 7836,
@@ -103,9 +103,9 @@ PRODUCTS = {
     },
     'dill_pickle': {
         'prices': {
-            'small': 1.99,
-            'medium': 2.99,
-            'large': 3.99
+            'small': 1.11,
+            'medium': 2.53,
+            'large': 3.59
             },
         'inventory': {
             'small': 2834,
@@ -115,9 +115,9 @@ PRODUCTS = {
     },
     'salt_and_pepper': {
         'prices': {
-            'small': 1.99,
-            'medium': 2.99,
-            'large': 3.99
+            'small': 1.34,
+            'medium': 2.42,
+            'large': 3.94
         },
         'inventory': {
             'small': 3564,
@@ -155,11 +155,3 @@ def update_inventory(inventory_changes: UpdateInventorySchema):
                 new_inventory = old_inventory + object['quantity']
                 product_details['inventory'][object['size']] = new_inventory
                 return {"old_inventory": old_inventory, "new_inventory": new_inventory}
-            
-                
-                
-'''
-products service is responsible for maintaining a list of products and their details
-'''
-# products service = 172.31.8.169
-# orders service = 172.31.5.34
