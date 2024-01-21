@@ -21,7 +21,10 @@ def create_order(items: CreateOrderSchema):
     order['created'] = datetime.utcnow()
     order['price'] = calculate_price(order)
     ORDERS.append(order)
+    # a copy of the order is made and the quantity of each item becomes a negative number since they need to be removed from the inventory
     order_copy = deepcopy(order)
+    for item in order_copy['items']:
+        item['quantity'] = item['quantity'] * -1
     update_inventory(order_copy)
     return order
 
@@ -39,6 +42,7 @@ def update_order(order_id: UUID, order: UpdateOrderSchema):
         if order['order_id'] == order_id:
             updated_order['price'] = calculate_price(updated_order)
             ORDERS[index] = updated_order
+            update_inventory(updated_order)
             return updated_order
     raise HTTPException(status_code=404, detail=f'order {order_id} was not found')
 
@@ -47,18 +51,16 @@ def delete_order(order_id: UUID):
     for index, order in enumerate(ORDERS):
         if order['order_id'] == order_id:
             ORDERS.pop(index)
-            return f'Order {order_id} has been deleted'
-    raise HTTPException(status_code=404, detail=f'order {order_id} was not found')
+            return { "msg": f"Order {order_id} has been deleted"}
+    raise HTTPException(status_code=404, detail=f"order {order_id} was not found")
 
 def update_inventory(order: dict):
     inventory_changes = {}
     inventory_changes['items'] = order['items']
-    for item in inventory_changes['items']:
-        item['quantity'] = item['quantity'] * -1
-    requests.put('https://c76vzjivmb.execute-api.us-west-1.amazonaws.com/dev/products/inventory', json=inventory_changes)
+    requests.put('http://127.0.0.1:8080/products/inventory', json=inventory_changes)
     
 def calculate_price(order: dict):
-    product_prices = requests.get('https://c76vzjivmb.execute-api.us-west-1.amazonaws.com/dev/products/prices').json()
+    product_prices = requests.get('http://127.0.0.1:8080/products/prices').json()
     order_price = 0
     for item in order['items']:
         order_price = order_price + (item['quantity'] * product_prices[item['flavor']][item['size']])
