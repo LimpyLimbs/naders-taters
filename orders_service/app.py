@@ -22,6 +22,8 @@ def create_order(items: CreateOrderSchema):
     order['price'] = calculate_price(order)
     ORDERS.append(order)
     order_copy = deepcopy(order)
+    for item in order_copy['items']:
+        item['quantity'] = item['quantity'] * -1
     update_inventory(order_copy)
     return order
 
@@ -33,12 +35,19 @@ def get_order(order_id: UUID):
         raise HTTPException(status_code=404, detail=f'order {order_id} was not found')
     
 @app.put('/orders/{order_id}', status_code=status.HTTP_201_CREATED, response_model=GetOrderSchema)
-def update_order(order_id: UUID, order: UpdateOrderSchema):
-    updated_order = order.model_dump()
+def update_order(order_id: UUID, new_order: UpdateOrderSchema):
+    updated_order = new_order.model_dump()
     for index, order in enumerate(ORDERS):
         if order['order_id'] == order_id:
             updated_order['price'] = calculate_price(updated_order)
             ORDERS[index] = updated_order
+            # returns the items in the old order to the /products/inventory service
+            update_inventory(order)
+            # create a copy of the new order and remove those items from the /products/inventory service
+            order_copy = deepcopy(updated_order)
+            for item in order_copy['items']:
+                item['quantity'] = item['quantity'] * -1
+            update_inventory(order_copy)
             return updated_order
     raise HTTPException(status_code=404, detail=f'order {order_id} was not found')
 
@@ -53,12 +62,11 @@ def delete_order(order_id: UUID):
 def update_inventory(order: dict):
     inventory_changes = {}
     inventory_changes['items'] = order['items']
-    for item in inventory_changes['items']:
-        item['quantity'] = item['quantity'] * -1
-    requests.put('https://c76vzjivmb.execute-api.us-west-1.amazonaws.com/dev/products/inventory', json=inventory_changes)
+    print(inventory_changes)
+    requests.put('http://127.0.0.1:8080/products/inventory', json=inventory_changes)
     
 def calculate_price(order: dict):
-    product_prices = requests.get('https://c76vzjivmb.execute-api.us-west-1.amazonaws.com/dev/products/prices').json()
+    product_prices = requests.get('http://127.0.0.1:8080/products/prices').json()
     order_price = 0
     for item in order['items']:
         order_price = order_price + (item['quantity'] * product_prices[item['flavor']][item['size']])
