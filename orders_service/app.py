@@ -62,7 +62,6 @@ def delete_order(order_id: UUID):
 def update_inventory(order: dict):
     inventory_changes = {}
     inventory_changes['items'] = order['items']
-    print(inventory_changes)
     requests.put('http://127.0.0.1:8080/products/inventory', json=inventory_changes)
     
 def calculate_price(order: dict):
