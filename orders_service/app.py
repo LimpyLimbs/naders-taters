@@ -35,20 +35,20 @@ def get_order(order_id: UUID):
         raise HTTPException(status_code=404, detail=f'order {order_id} was not found')
     
 @app.put('/orders/{order_id}', status_code=status.HTTP_201_CREATED, response_model=GetOrderSchema)
-def update_order(order_id: UUID, new_order: UpdateOrderSchema):
-    updated_order = new_order.model_dump()
-    for index, order in enumerate(ORDERS):
-        if order['order_id'] == order_id:
-            updated_order['price'] = calculate_price(updated_order)
-            ORDERS[index] = updated_order
-            # returns the items in the old order to the /products/inventory service
-            update_inventory(order)
+def update_order(order_id: UUID, order: UpdateOrderSchema):
+    new_order = order.model_dump()
+    for index, old_order in enumerate(ORDERS):
+        if old_order['order_id'] == order_id:
+            new_order['price'] = calculate_price(new_order)
+            ORDERS[index] = new_order
+            # returns the items from the old order to the /products/inventory service
+            update_inventory(old_order)
             # create a copy of the new order and remove those items from the /products/inventory service
-            order_copy = deepcopy(order)
+            order_copy = deepcopy(new_order)
             for item in order_copy['items']:
                 item['quantity'] = item['quantity'] * -1
             update_inventory(order_copy)
-            return updated_order
+            return new_order
     raise HTTPException(status_code=404, detail=f'order {order_id} was not found')
 
 @app.delete('/orders/{order_id}', status_code=status.HTTP_202_ACCEPTED)
