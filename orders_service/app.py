@@ -62,10 +62,10 @@ def delete_order(order_id: UUID):
 def update_inventory(order: dict):
     inventory_changes = {}
     inventory_changes['items'] = order['items']
-    requests.put('http://127.0.0.1:8080/products/inventory', json=inventory_changes)
+    requests.put('https://c76vzjivmb.execute-api.us-west-1.amazonaws.com/dev/products/inventory', json=inventory_changes)
     
 def calculate_price(order: dict):
-    product_prices = requests.get('http://127.0.0.1:8080/products/prices').json()
+    product_prices = requests.get('https://c76vzjivmb.execute-api.us-west-1.amazonaws.com/dev/products/prices').json()
     order_price = 0
     for item in order['items']:
         order_price = order_price + (item['quantity'] * product_prices[item['flavor']][item['size']])
